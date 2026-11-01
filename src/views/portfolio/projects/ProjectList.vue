@@ -453,10 +453,24 @@ export default {
           field: 'metrics.kev',
           sortable: false,
           align: 'center',
-          formatter(value) {
-            return value > 0
-              ? `<span class="text-danger fw-bold">${Number(value)}</span>`
-              : value;
+          routerFunc: () => this.$router,
+          formatter(value, row) {
+            if (!(value > 0)) {
+              return value;
+            }
+            const count = `<span class="text-danger fw-bold">${Number(value)}</span>`;
+            if (row.collectionLogic) {
+              // Collection projects have no findings of their own to link to.
+              return count;
+            }
+            const url = xssFilters.uriInUnQuotedAttr(
+              this.routerFunc().resolve({
+                name: 'Project',
+                params: { uuid: row.uuid, tab: 'findings' },
+                query: { kev: 'true' },
+              }).fullPath,
+            );
+            return `<a href="${url}">${count}</a>`;
           },
         },
       ],

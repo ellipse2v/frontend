@@ -106,8 +106,9 @@ export default {
         localStorage.getItem('ProjectFindingsShowSuppressedFindings') ===
           'true',
       showKevOnly:
-        !!localStorage &&
-        localStorage.getItem('ProjectFindingsShowKevOnly') === 'true',
+        this.$route.query.kev === 'true' ||
+        (!!localStorage &&
+          localStorage.getItem('ProjectFindingsShowKevOnly') === 'true'),
       booleanFilters: ['showSuppressedFindings', 'showKevOnly'],
       columns: [
         {
